@@ -51,17 +51,15 @@ jobs:
         env:
           AMP_API_KEY: ${{ secrets.AMP_API_KEY }}
           PROMPT: ${{ github.event.inputs.prompt }}
-        run: echo "$PROMPT" | amp
+        run: echo "Read AGENT.md. $PROMPT" | amp
 
-      - name: Create Pull Request
+      - name: Create Branch with Changes
         if: steps.check-admin.outputs.result == 'true'
-        uses: peter-evans/create-pull-request@f689536846d983d7c4f399cd9b789c38c963aaca
-        with:
-          commit-message: "AMP PR"
-          title: "AMP PR"
-          body: |
-            This PR was created by the AMP workflow.
-
-            Prompt: ${{ github.event.inputs.prompt }}
-          branch: amp-changes-${{ github.run_id }}
-          base: main
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git checkout -b amp-changes-${{ github.run_id }}
+          git add .
+          git commit -m "AMP: Process changes\n\nPrompt: ${{ github.event.inputs.prompt }}"
+          git push -u origin amp-changes-${{ github.run_id }}
+          echo "::notice::Branch created: amp-changes-${{ github.run_id }}. Create a PR manually from this branch."
