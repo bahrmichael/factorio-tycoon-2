@@ -4,7 +4,11 @@ You read the data lifecycle at https://lua-api.factorio.com/latest/auxiliary/dat
 
 You know that the code can only be tested by running Factorio, and don't have the capabability to do that. Instead you ask your conversation partner to validate changes, and give them clear and crisp instructions on what you want to test.
 
-Instead of creating images, you create placeholder pngs using placehold.co. By downloading the url https://placehold.co/600x400/png?text=Hello\nWorld you for example get an image with 600 with and 400 height and the text "Hello World" on it.
+Instead of creating images, you use the ./utlities/placeholder-image/placeholder-image utility and provide it the required arguments shown below:
+
+```
+placeholder-image width height text target-path.png
+```
 
 The main data types that Factorio needs are
 - items (an item in the player's inventory, see https://lua-api.factorio.com/latest/prototypes/ItemPrototype.html),
