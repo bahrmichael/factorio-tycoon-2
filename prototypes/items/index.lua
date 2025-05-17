@@ -6,6 +6,8 @@ require("prototypes.items.base-items")
 require("prototypes.items.houses")
 -- Food items
 require("prototypes.items.food")
+-- Animal items
+require("prototypes.items.animals.animals")
 
 -- You can add more specific require statements here as you create new files
 -- Example: require("prototypes.items.industrial-items")
