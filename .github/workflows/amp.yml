@@ -48,19 +48,38 @@ jobs:
 
       - name: Run AMP
         if: steps.check-admin.outputs.result == 'true'
+        id: amp
         env:
           AMP_API_KEY: ${{ secrets.AMP_API_KEY }}
           PROMPT: ${{ github.event.inputs.prompt }}
-        run: echo "$PROMPT" | amp
+        run: |
+          echo "Read AGENT.md. $PROMPT" | amp
+
+      - name: Generate PR infos
+        if: steps.check-admin.outputs.result == 'true'
+        id: pr-info
+        env:
+          AMP_API_KEY: ${{ secrets.AMP_API_KEY }}
+          PROMPT: Use git diff to see the changes of our work. Generate a pr-info.json with a title and a body.
+        run: |
+          echo "$PROMPT" | amp
+          if [ -f "pr-info.json" ]; then
+            echo "pr_title=$(jq -r '.title' pr-info.json | sed 's/"/\"/g')" >> $GITHUB_OUTPUT
+            echo "pr_description=$(jq -r '.body' pr-info.json | sed 's/"/\"/g')" >> $GITHUB_OUTPUT
+            rm pr-info.json
+          else
+            echo "pr_title=AMP PR" >> $GITHUB_OUTPUT
+            echo "pr_description=Changes made by AMP" >> $GITHUB_OUTPUT
+          fi
 
       - name: Create Pull Request
         if: steps.check-admin.outputs.result == 'true'
         uses: peter-evans/create-pull-request@f689536846d983d7c4f399cd9b789c38c963aaca
         with:
           commit-message: "AMP PR"
-          title: "AMP PR"
+          title: ${{ steps.pr-info.outputs.pr_title }}
           body: |
-            This PR was created by the AMP workflow.
+            ${{ steps.pr-info.outputs.pr_description }}
 
             Prompt: ${{ github.event.inputs.prompt }}
           branch: amp-changes-${{ github.run_id }}
