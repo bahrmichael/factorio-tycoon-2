@@ -1,0 +1,67 @@
+name: AMP Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: "Prompt"
+        required: true
+
+jobs:
+  amp-process:
+    runs-on: ubuntu-latest
+    # Restrict to admins only
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Check if user is admin
+        id: check-admin
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data } = await github.rest.repos.getCollaboratorPermissionLevel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              username: context.actor
+            });
+            if (data.permission !== 'admin') {
+              core.setFailed('Only repository admins can run this workflow');
+              return false;
+            }
+            return true;
+
+      - name: Checkout repository
+        if: steps.check-admin.outputs.result == 'true'
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        if: steps.check-admin.outputs.result == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install AMP
+        if: steps.check-admin.outputs.result == 'true'
+        run: npm install -g @sourcegraph/amp
+
+      - name: Run AMP
+        if: steps.check-admin.outputs.result == 'true'
+        env:
+          AMP_API_KEY: ${{ secrets.AMP_API_KEY }}
+          PROMPT: ${{ github.event.inputs.prompt }}
+        run: echo "$PROMPT" | amp
+
+      - name: Create Pull Request
+        if: steps.check-admin.outputs.result == 'true'
+        uses: peter-evans/create-pull-request@f689536846d983d7c4f399cd9b789c38c963aaca
+        with:
+          commit-message: "AMP PR"
+          title: "AMP PR"
+          body: |
+            This PR was created by the AMP workflow.
+
+            Prompt: ${{ github.event.inputs.prompt }}
+          branch: amp-changes-${{ github.run_id }}
+          base: main
