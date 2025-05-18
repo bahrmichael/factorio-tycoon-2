@@ -22,9 +22,9 @@ jobs:
         with:
           ref: refs/pull/${{ github.event.issue.number }}/head
 
-      - name: Print Extracted Comment
-        if: steps.extract.outputs.comment != ''
-        run: echo ${{ steps.extract.outputs.comment }}"
+      # - name: Print Extracted Comment
+      #   if: steps.extract.outputs.comment != ''
+      #   run: echo ${{ steps.extract.outputs.comment }}"
 
       - name: Run AMP
         if: steps.extract.outputs.comment != ''
