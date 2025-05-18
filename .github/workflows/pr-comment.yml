@@ -1,0 +1,61 @@
+name: PR Comment Workflow
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  process-comment:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Extract Comment
+        id: extract
+        if: github.event.issue.pull_request != null && github.event.comment.user.login == 'bahrmichael' && startsWith(toLowerCase(github.event.comment.body), 'amp')
+        run: |
+          COMMENT="$(echo "${{ github.event.comment.body }}" | sed 's/^[Aa][Mm][Pp]\s*//')"
+          echo "comment=$COMMENT" >> $GITHUB_OUTPUT
+
+      - name: Checkout PR
+        if: steps.extract.outputs.comment != ''
+        uses: actions/checkout@v4
+        with:
+          ref: refs/pull/${{ github.event.issue.number }}/head
+
+      - name: Print Extracted Comment
+        if: steps.extract.outputs.comment != ''
+        run: echo ${{ steps.extract.outputs.comment }}"
+
+      - name: Run AMP
+        if: steps.extract.outputs.comment != ''
+        id: amp
+        env:
+          AMP_API_KEY: ${{ secrets.AMP_API_KEY }}
+          PROMPT: ${{ steps.extract.outputs.comment }}
+          AMP_SETTINGS_FILE: .github/ci-amp-settings.json
+        run: |
+          echo "$PROMPT" | amp --no-notifications --no-color
+
+      - name: Generate commit message
+        if: steps.extract.outputs.comment != ''
+        id: commit-info
+        env:
+          AMP_API_KEY: ${{ secrets.AMP_API_KEY }}
+          PROMPT: Use git diff to see the changes of our work. Generate a commit-info.txt with a commit message.
+        run: |
+          echo "$PROMPT" | amp --no-notifications --no-color
+          if [ -f "commit-info.txt" ]; then
+            echo "commit_message=$(cat commit-info.txt)" >> $GITHUB_OUTPUT
+            rm commit-info.txt
+          else
+            echo "commit_message=Changes made by AMP" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: Push changes back to PR
+        if: steps.extract.outputs.comment != ''
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+          git add .
+          git diff --staged --quiet || git commit -m "${{ steps.commit-info.outputs.commit_message }}"
+          git push
