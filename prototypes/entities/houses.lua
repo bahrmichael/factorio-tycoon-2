@@ -1,9 +1,19 @@
 -- House entities
 
+-- Define a new category for house crafting
 data:extend({
   {
-    type = "container",
+    type = "recipe-category",
+    name = "house-crafting"
+  }
+})
+
+data:extend({
+  {
+    type = "assembling-machine",
     name = "small-house",
+    crafting_categories = {"crafting", "house-crafting"},
+    crafting_speed = 0.5,
     icon = "__tycoon-2__/graphics/items/small-house.png",
     icon_size = 64,
     flags = {"placeable-neutral", "player-creation"},
@@ -24,8 +34,10 @@ data:extend({
     }
   },
   {
-    type = "container",
+    type = "assembling-machine",
     name = "medium-house",
+    crafting_categories = {"crafting", "house-crafting"},
+    crafting_speed = 0.75,
     icon = "__tycoon-2__/graphics/items/medium-house.png",
     icon_size = 64,
     flags = {"placeable-neutral", "player-creation"},
@@ -46,8 +58,10 @@ data:extend({
     }
   },
   {
-    type = "container",
+    type = "assembling-machine",
     name = "large-house",
+    crafting_categories = {"crafting", "house-crafting"},
+    crafting_speed = 1.0,
     icon = "__tycoon-2__/graphics/items/large-house.png",
     icon_size = 64,
     flags = {"placeable-neutral", "player-creation"},
