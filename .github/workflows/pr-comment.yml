@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Extract Comment
         id: extract
-        if: github.event.issue.pull_request != null && github.event.comment.user.login == 'bahrmichael' && startsWith(toLowerCase(github.event.comment.body), 'amp')
+        if: github.event.issue.pull_request != null && github.event.comment.user.login == 'bahrmichael' && startsWith(github.event.comment.body, 'Amp')
         run: |
           COMMENT="$(echo "${{ github.event.comment.body }}" | sed 's/^[Aa][Mm][Pp]\s*//')"
           echo "comment=$COMMENT" >> $GITHUB_OUTPUT
@@ -50,7 +50,7 @@ jobs:
           else
             echo "commit_message=Changes made by AMP" >> $GITHUB_OUTPUT
           fi
-          
+
       - name: Push changes back to PR
         if: steps.extract.outputs.comment != ''
         run: |
