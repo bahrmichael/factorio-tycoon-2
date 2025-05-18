@@ -6,6 +6,8 @@ require("prototypes.items.base-items")
 require("prototypes.items.houses")
 -- Food items
 require("prototypes.items.food")
+-- Terrain items
+require("prototypes.items.terrain")
 
 -- Worker items
 require("prototypes.items.workers")

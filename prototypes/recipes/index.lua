@@ -6,6 +6,8 @@ require("prototypes.recipes.base-recipes")
 require("prototypes.recipes.houses")
 -- Food recipes
 require("prototypes.recipes.food")
+-- Terrain recipes
+require("prototypes.recipes.terrain")
 
 -- Worker recipes
 require("prototypes.recipes.workers")
