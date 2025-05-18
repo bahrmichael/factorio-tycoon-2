@@ -35,10 +35,6 @@ jobs:
         with:
           ref: refs/pull/${{ github.event.issue.number }}/head
 
-      # - name: Print Extracted Comment
-      #   if: steps.extract.outputs.comment != ''
-      #   run: echo ${{ steps.extract.outputs.comment }}"
-
       - name: Setup Node.js
         if: steps.extract.outputs.comment != ''
         uses: actions/setup-node@v4
@@ -64,18 +60,17 @@ jobs:
         id: commit-info
         env:
           AMP_API_KEY: ${{ secrets.AMP_API_KEY }}
-          PROMPT: Use git diff to see the changes of our work. Generate a commit-info.txt with a commit message on the first line followed by a more detailed description. You must not use any special characters except ":.,"
+          PROMPT: Use git diff to see the changes of our work. Generate a commit-info.txt with exactly two lines. The first line should be a short commit message, and the second line should be a single paragraph description (no line breaks). Do not use any special characters except ":.,"
         run: |
           echo "$PROMPT" | amp --no-notifications --no-color
           if [ -f "commit-info.txt" ]; then
             COMMIT_MSG=$(head -n 1 commit-info.txt)
+            COMMIT_INFO=$(tail -n 1 commit-info.txt)
             echo "commit_message=$COMMIT_MSG" >> $GITHUB_OUTPUT
-            echo "file_content<<EOF" >> $GITHUB_OUTPUT
-            cat commit-info.txt >> $GITHUB_OUTPUT
-            echo "EOF" >> $GITHUB_OUTPUT
+            echo "commit_description=$COMMIT_INFO" >> $GITHUB_OUTPUT
           else
             echo "commit_message=Changes made by AMP" >> $GITHUB_OUTPUT
-            echo "file_content=Changes made by AMP" >> $GITHUB_OUTPUT
+            echo "commit_description=I made some changes" >> $GITHUB_OUTPUT
           fi
 
       - name: Push changes back to PR
@@ -97,5 +92,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `${{ steps.commit-info.outputs.file_content }}`
+              body: `${{ steps.commit-info.outputs.commit_description }}`
             })
