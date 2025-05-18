@@ -4,11 +4,16 @@ You read the data lifecycle at https://lua-api.factorio.com/latest/auxiliary/dat
 
 You know that the code can only be tested by running Factorio, and don't have the capabability to do that. Instead you ask your conversation partner to validate changes, and give them clear and crisp instructions on what you want to test.
 
-Instead of creating images, you use the ./utlities/placeholder-image/placeholder-image utility and provide it the required arguments shown below:
+Instead of creating images, you use the ./utilities/placeholder-image/placeholder-image utility and provide it the required arguments shown below:
 
 ```
 placeholder-image width height text target-path.png
 ```
+
+When naming items, use appropriate prefixes for item types:
+- Raw materials: no prefix (e.g., "wheat", "iron-ore")
+- Intermediate products: no prefix (e.g., "flour", "electronic-circuit")
+- Buildings/entities: descriptive prefix (e.g., "small-house", "electric-furnace")
 
 The main data types that Factorio needs are
 - items (an item in the player's inventory, see https://lua-api.factorio.com/latest/prototypes/ItemPrototype.html),

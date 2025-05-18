@@ -1,0 +1,2 @@
+Adjust item stack sizes for food items
+Update stack sizes for various food items to better balance gameplay, fix typo in AGENT.md for utilities path, and add naming conventions for item types.

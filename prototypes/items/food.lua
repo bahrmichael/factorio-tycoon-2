@@ -8,7 +8,7 @@ data:extend({
     icon_size = 64,
     subgroup = "raw-material",
     order = "b[wheat]",
-    stack_size = 100
+    stack_size = 50
   },
   {
     type = "item",
@@ -26,7 +26,7 @@ data:extend({
     icon_size = 64,
     subgroup = "intermediate-product",
     order = "b[flour]",
-    stack_size = 100
+    stack_size = 75
   },
   {
     type = "fluid",
@@ -47,7 +47,7 @@ data:extend({
     icon_size = 64,
     subgroup = "intermediate-product",
     order = "b[dough]",
-    stack_size = 100
+    stack_size = 50
   },
   {
     type = "item",
@@ -56,7 +56,7 @@ data:extend({
     icon_size = 64,
     subgroup = "intermediate-product",
     order = "b[bread]",
-    stack_size = 100,
+    stack_size = 75,
     fuel_value = "2MJ",
     fuel_category = "chemical"
   }
@@ -98,7 +98,7 @@ data:extend({
     icon_size = 64,
     subgroup = "raw-material",
     order = "c[coffee-beans]",
-    stack_size = 100
+    stack_size = 150
   },
   {
     type = "item",
@@ -125,7 +125,7 @@ data:extend({
     icon_size = 64,
     subgroup = "raw-material",
     order = "c[eggs]",
-    stack_size = 100
+    stack_size = 50
   },
   {
     type = "item",
