@@ -68,6 +68,7 @@ jobs:
             COMMIT_INFO=$(tail -n 1 commit-info.txt)
             echo "commit_message=$COMMIT_MSG" >> $GITHUB_OUTPUT
             echo "commit_description=$COMMIT_INFO" >> $GITHUB_OUTPUT
+            rm commit-info.txt
           else
             echo "commit_message=Changes made by AMP" >> $GITHUB_OUTPUT
             echo "commit_description=I made some changes" >> $GITHUB_OUTPUT

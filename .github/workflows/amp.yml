@@ -61,7 +61,7 @@ jobs:
         id: pr-info
         env:
           AMP_API_KEY: ${{ secrets.AMP_API_KEY }}
-          PROMPT: Use git diff to see the changes of our work. Generate a pr-info.json with a title and a body.
+          PROMPT: Use git diff to see the changes of our work. Generate a pr-info.json with a title and a body. Do not use any special characters except ":,."
         run: |
           echo "$PROMPT" | amp --no-notifications --no-color
           if [ -f "pr-info.json" ]; then
