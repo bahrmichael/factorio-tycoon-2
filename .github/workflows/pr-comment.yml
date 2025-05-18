@@ -16,6 +16,19 @@ jobs:
           COMMENT="$(echo "${{ github.event.comment.body }}" | sed 's/^[Aa][Mm][Pp]\s*//')"
           echo "comment=$COMMENT" >> $GITHUB_OUTPUT
 
+      - name: Post Working Comment
+        if: steps.extract.outputs.comment != ''
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "I'm working on it!"
+            })
+
       - name: Checkout PR
         if: steps.extract.outputs.comment != ''
         uses: actions/checkout@v4
@@ -51,14 +64,18 @@ jobs:
         id: commit-info
         env:
           AMP_API_KEY: ${{ secrets.AMP_API_KEY }}
-          PROMPT: Use git diff to see the changes of our work. Generate a commit-info.txt with a commit message.
+          PROMPT: Use git diff to see the changes of our work. Generate a commit-info.txt with a commit message on the first line followed by a more detailed description. You must not use any special characters except ":.,"
         run: |
           echo "$PROMPT" | amp --no-notifications --no-color
           if [ -f "commit-info.txt" ]; then
-            echo "commit_message=$(cat commit-info.txt)" >> $GITHUB_OUTPUT
-            rm commit-info.txt
+            COMMIT_MSG=$(head -n 1 commit-info.txt)
+            echo "commit_message=$COMMIT_MSG" >> $GITHUB_OUTPUT
+            echo "file_content<<EOF" >> $GITHUB_OUTPUT
+            cat commit-info.txt >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
           else
             echo "commit_message=Changes made by AMP" >> $GITHUB_OUTPUT
+            echo "file_content=Changes made by AMP" >> $GITHUB_OUTPUT
           fi
 
       - name: Push changes back to PR
@@ -69,3 +86,16 @@ jobs:
           git add .
           git diff --staged --quiet || git commit -m "${{ steps.commit-info.outputs.commit_message }}"
           git push
+
+      - name: Post Commit Info Comment
+        if: steps.extract.outputs.comment != ''
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `${{ steps.commit-info.outputs.file_content }}`
+            })
