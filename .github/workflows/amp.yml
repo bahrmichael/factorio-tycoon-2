@@ -55,6 +55,30 @@ jobs:
           AMP_SETTINGS_FILE: .github/ci-amp-settings.json
         run: |
           echo "$PROMPT" | amp --no-notifications --no-color
+          
+      - name: Create placeholder images for missing PNG files
+        if: steps.check-admin.outputs.result == 'true'
+        run: |
+          # Find all PNG references in Lua files
+          MISSING_IMAGES=$(grep -r --include="*.lua" -o '"[^"]*\.png"' . | sed 's/^.*"\(.*\)".*$/\1/' | sort -u | while read -r img; do
+            # Convert __tycoon-2__ path to the actual repository root
+            ACTUAL_PATH=$(echo "$img" | sed 's|__tycoon-2__|.|')
+            # Check if the file exists
+            if [ ! -f "$ACTUAL_PATH" ]; then
+              echo "$ACTUAL_PATH"
+            fi
+          done)
+          
+          # Create placeholder images for all missing files
+          for img in $MISSING_IMAGES; do
+            # Create directory if it doesn't exist
+            mkdir -p "$(dirname "$img")"
+            # Extract filename for the placeholder text
+            FILENAME=$(basename "$img" .png)
+            # Create placeholder image (64x64 with filename as text)
+            ./utilities/placeholder-image/placeholder-image 64 64 "$FILENAME" "$img"
+            echo "Created placeholder for $img"
+          done
 
       - name: Generate PR infos
         if: steps.check-admin.outputs.result == 'true'
