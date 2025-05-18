@@ -2,30 +2,30 @@ name: Factorio E2E Tests
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   e2e-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      
+      - uses: actions/checkout@v4
+
       - name: Create mod directory
         run: |
           mkdir -p ~/factorio/mods/factorio-tycoon-2
           cp -r . ~/factorio/mods/factorio-tycoon-2/
-      
+
       - name: Download Factorio headless
         run: |
           wget -q https://factorio.com/get-download/stable/headless/linux64 -O factorio.tar.xz
           tar -xJf factorio.tar.xz
-      
+
       - name: Configure Factorio server
         run: |
           echo '{"mods":[{"name":"factorio-tycoon-2","enabled":true}]}' > ./factorio/mods/mod-list.json
-      
+
       - name: Create new save and run server
         id: run_server
         run: |
@@ -40,7 +40,7 @@ jobs:
           else
             echo "Factorio server started successfully"
           fi
-      
+
       - name: Upload server logs on failure
         if: failure()
         uses: actions/upload-artifact@v3
