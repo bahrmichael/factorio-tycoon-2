@@ -2,3 +2,5 @@
 
 -- Base technology requires
 require("prototypes.technologies.base-technologies")
+-- Agriculture technologies
+require("prototypes.technologies.agriculture")

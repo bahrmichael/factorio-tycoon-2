@@ -11,3 +11,5 @@ require("prototypes.items.food")
 require("prototypes.items.workers")
 
 -- You can add more specific require statements here as you create new files
+-- Soil items
+require("prototypes.items.soil")
