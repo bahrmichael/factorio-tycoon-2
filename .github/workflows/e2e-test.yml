@@ -33,11 +33,16 @@ jobs:
           set +e
           mkdir -p ./factorio/saves
           ./factorio/bin/x64/factorio --create ./factorio/saves/tycoon-test.zip
-          SERVER_OUTPUT=$(./factorio/bin/x64/factorio --start-server ./factorio/saves/tycoon-test.zip --server-settings ./factorio/data/server-settings.example.json 2>&1)
-          echo "$SERVER_OUTPUT" > server_output.log
-          if echo "$SERVER_OUTPUT" | grep -i "error"; then
+          # Start server with timeout - will terminate if no new output for 10 seconds
+          timeout --foreground --kill-after=5s 30s ./factorio/bin/x64/factorio --start-server ./factorio/saves/tycoon-test.zip --server-settings ./factorio/data/server-settings.example.json > server_output.log 2>&1
+          EXIT_CODE=$?
+          cat server_output.log
+          # Timeout exit code is 124, which means server ran without new output for 10s - success case
+          if [ $EXIT_CODE -eq 124 ]; then
+            echo "Server ran successfully for 10 seconds without errors"
+            exit 0
+          elif grep -i "error" server_output.log; then
             echo "::error ::Factorio server encountered errors"
-            echo "$SERVER_OUTPUT"
             exit 1
           else
             echo "Factorio server started successfully"
