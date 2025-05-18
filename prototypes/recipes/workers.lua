@@ -7,11 +7,12 @@ data:extend({
     category = "crafting", -- Default category
     energy_required = 5,
     ingredients = {
-      {"tycoon-tired-worker", 1},
-      {"bread", 1}
+      {type = "item", name = "tycoon-tired-worker", amount = 1},
+      {type = "item", name = "bread", amount = 1}
     },
-    result = "tycoon-worker",
-    result_count = 1,
+    results = {
+      {type = "item", name = "tycoon-worker", amount = 1}
+    },
     enabled = true,
     -- This recipe can only be crafted in houses
     allow_as_intermediate = false,

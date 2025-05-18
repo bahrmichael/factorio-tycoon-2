@@ -1,5 +1,2 @@
 -- Recipe prototypes
-
-data:extend({
-  -- Add recipes here
-})
+-- Base recipes will be added here later

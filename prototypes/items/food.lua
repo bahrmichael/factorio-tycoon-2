@@ -33,7 +33,7 @@ data:extend({
     name = "milk",
     default_temperature = 15,
     max_temperature = 100,
-    heat_capacity = "0.2KJ",
+    heat_capacity = "0.2kJ",
     base_color = {r=0.9, g=0.9, b=0.9},
     flow_color = {r=0.9, g=0.9, b=1.0},
     icon = "__tycoon-2__/graphics/items/milk.png",

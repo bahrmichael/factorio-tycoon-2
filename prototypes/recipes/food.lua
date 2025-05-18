@@ -8,10 +8,11 @@ data:extend({
     enabled = true,
     energy_required = 1,
     ingredients = {
-      {"wheat", 2}
+      {type = "item", name = "wheat", amount = 2}
     },
-    result = "grain",
-    result_count = 1
+    results = {
+      {type = "item", name = "grain", amount = 1}
+    }
   },
   {
     type = "recipe",
@@ -20,10 +21,11 @@ data:extend({
     enabled = true,
     energy_required = 2,
     ingredients = {
-      {"grain", 1}
+      {type = "item", name = "grain", amount = 1}
     },
-    result = "flour",
-    result_count = 1
+    results = {
+      {type = "item", name = "flour", amount = 1}
+    }
   },
   {
     type = "recipe",
@@ -32,11 +34,12 @@ data:extend({
     enabled = true,
     energy_required = 3,
     ingredients = {
-      {"flour", 2},
-      {type="fluid", name="milk", amount=20}
+      {type = "item", name = "flour", amount = 2},
+      {type = "fluid", name = "milk", amount = 20}
     },
-    result = "dough",
-    result_count = 1
+    results = {
+      {type = "item", name = "dough", amount = 1}
+    }
   },
   {
     type = "recipe",
@@ -45,8 +48,10 @@ data:extend({
     enabled = true,
     energy_required = 3.5,
     ingredients = {
-      {"dough", 1}
+      {type = "item", name = "dough", amount = 1}
     },
-    result = "bread"
+    results = {
+      {type = "item", name = "bread", amount = 1}
+    }
   }
 })
