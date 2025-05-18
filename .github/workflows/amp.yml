@@ -52,8 +52,9 @@ jobs:
         env:
           AMP_API_KEY: ${{ secrets.AMP_API_KEY }}
           PROMPT: ${{ github.event.inputs.prompt }}
+          AMP_SETTINGS_FILE: .github/ci-amp-settings.json
         run: |
-          echo "Read AGENT.md. $PROMPT" | amp
+          echo "$PROMPT" | amp --no-notifications --no-color
 
       - name: Generate PR infos
         if: steps.check-admin.outputs.result == 'true'
@@ -62,7 +63,7 @@ jobs:
           AMP_API_KEY: ${{ secrets.AMP_API_KEY }}
           PROMPT: Use git diff to see the changes of our work. Generate a pr-info.json with a title and a body.
         run: |
-          echo "$PROMPT" | amp
+          echo "$PROMPT" | amp --no-notifications --no-color
           if [ -f "pr-info.json" ]; then
             echo "pr_title=$(jq -r '.title' pr-info.json | sed 's/"/\"/g')" >> $GITHUB_OUTPUT
             echo "pr_description=$(jq -r '.body' pr-info.json | sed 's/"/\"/g')" >> $GITHUB_OUTPUT
