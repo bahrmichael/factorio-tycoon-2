@@ -15,7 +15,7 @@ jobs:
       - name: Create mod directory
         run: |
           mkdir -p ./factorio/mods/tycoon-2
-          cp -r . ./factorio/mods/tycoon-2/
+          find . -maxdepth 1 -mindepth 1 -not -path "./factorio" -exec cp -r {} ./factorio/mods/tycoon-2/ \;
 
       - name: Download Factorio headless
         run: |
