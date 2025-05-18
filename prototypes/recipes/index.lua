@@ -11,4 +11,3 @@ require("prototypes.recipes.food")
 require("prototypes.recipes.workers")
 
 -- You can add more specific require statements here as you create new files
--- Example: require("prototypes.recipes.industrial-recipes")
