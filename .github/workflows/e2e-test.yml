@@ -14,8 +14,8 @@ jobs:
 
       - name: Create mod directory
         run: |
-          mkdir -p ~/factorio/mods/factorio-tycoon-2
-          cp -r . ~/factorio/mods/factorio-tycoon-2/
+          mkdir -p ./factorio/mods/tycoon-2
+          cp -r . ./factorio/mods/tycoon-2/
 
       - name: Download Factorio headless
         run: |
@@ -25,7 +25,7 @@ jobs:
       - name: Configure Factorio server
         run: |
           mkdir -p ./factorio/mods
-          echo '{"mods":[{"name":"factorio-tycoon-2","enabled":true}]}' > ./factorio/mods/mod-list.json
+          echo '{"mods":[{"name":"tycoon-2","enabled":true}]}' > ./factorio/mods/mod-list.json
 
       - name: Create new save and run server
         id: run_server
