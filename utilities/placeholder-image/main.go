@@ -176,15 +176,25 @@ func processLuaFile(content string, _ string, prototypes map[string][]string) {
 
 // Determines if an image should be generated for the given prototype
 func generateImageIfMissing(protoType, protoName string) {
-	// Determine expected image path based on prototype type and name
+	// Only process items with tycoon- prefix
+	if !strings.HasPrefix(protoName, "tycoon-") {
+		// Skip non-tycoon items
+		fmt.Printf("Skipping non-tycoon %s: '%s'\n", protoType, protoName)
+		return
+	}
+
+	// Strip tycoon- prefix from the name for the image path
+	imageBaseName := strings.TrimPrefix(protoName, "tycoon-")
+	
+	// Determine expected image path based on prototype type and name (without tycoon- prefix)
 	var imagePath string
 	switch protoType {
 	case "item":
-		imagePath = fmt.Sprintf("graphics/items/%s.png", protoName)
+		imagePath = fmt.Sprintf("graphics/items/%s.png", imageBaseName)
 	case "entity":
-		imagePath = fmt.Sprintf("graphics/entities/%s.png", protoName)
+		imagePath = fmt.Sprintf("graphics/entities/%s.png", imageBaseName)
 	case "technology":
-		imagePath = fmt.Sprintf("graphics/technologies/%s.png", protoName)
+		imagePath = fmt.Sprintf("graphics/technologies/%s.png", imageBaseName)
 	default:
 		return // Unsupported prototype type
 	}
@@ -202,16 +212,9 @@ func generateImageIfMissing(protoType, protoName string) {
 	}
 
 	// For items, use only the first letter capitalized
-	text := protoName
-	if protoType == "item" {
-		// Strip tycoon- prefix if present
-		if strings.HasPrefix(protoName, "tycoon-") {
-			text = strings.TrimPrefix(protoName, "tycoon-")
-		}
-		
-		if len(text) > 0 {
-			text = strings.ToUpper(text[:1])
-		}
+	text := imageBaseName // Already stripped tycoon- prefix
+	if protoType == "item" && len(text) > 0 {
+		text = strings.ToUpper(text[:1])
 	}
 
 	// Generate placeholder image
