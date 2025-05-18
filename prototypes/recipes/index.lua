@@ -10,4 +10,10 @@ require("prototypes.recipes.food")
 -- Worker recipes
 require("prototypes.recipes.workers")
 
+-- Animal breeding recipes
+require("prototypes.recipes.animal-breeding")
+
+-- Soil recipes
+require("prototypes.recipes.soil")
+
 -- You can add more specific require statements here as you create new files
