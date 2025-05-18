@@ -60,4 +60,97 @@ data:extend({
     fuel_value = "2MJ",
     fuel_category = "chemical"
   }
+},
+  {
+    type = "item",
+    name = "tycoon-mascarpone",
+    icon = "__tycoon-2__/graphics/items/tycoon-mascarpone.png",
+    icon_size = 64,
+    subgroup = "intermediate-product",
+    order = "c[mascarpone]",
+    stack_size = 50
+  },
+  {
+    type = "item",
+    name = "tycoon-coffee",
+    icon = "__tycoon-2__/graphics/items/tycoon-coffee.png",
+    icon_size = 64,
+    subgroup = "intermediate-product",
+    order = "c[coffee]",
+    stack_size = 100
+  },
+  {
+    type = "item",
+    name = "tycoon-cocoa-powder",
+    icon = "__tycoon-2__/graphics/items/tycoon-cocoa-powder.png",
+    icon_size = 64,
+    subgroup = "intermediate-product",
+    order = "c[cocoa-powder]",
+    stack_size = 100
+  },
+  {
+    type = "item",
+    name = "tycoon-ladyfingers",
+    icon = "__tycoon-2__/graphics/items/tycoon-ladyfingers.png",
+    icon_size = 64,
+    subgroup = "intermediate-product",
+    order = "c[ladyfingers]",
+    stack_size = 50
+  },
+  {
+    type = "item",
+    name = "tycoon-sugar",
+    icon = "__tycoon-2__/graphics/items/tycoon-sugar.png",
+    icon_size = 64,
+    subgroup = "intermediate-product",
+    order = "c[sugar]",
+    stack_size = 100
+  },
+  {
+    type = "item",
+    name = "tycoon-coffee-beans",
+    icon = "__tycoon-2__/graphics/items/tycoon-coffee-beans.png",
+    icon_size = 64,
+    subgroup = "raw-material",
+    order = "b[coffee-beans]",
+    stack_size = 100
+  },
+  {
+    type = "item",
+    name = "tycoon-cocoa-beans",
+    icon = "__tycoon-2__/graphics/items/tycoon-cocoa-beans.png",
+    icon_size = 64,
+    subgroup = "raw-material",
+    order = "b[cocoa-beans]",
+    stack_size = 100
+  },
+  {
+    type = "item",
+    name = "tycoon-sugar-cane",
+    icon = "__tycoon-2__/graphics/items/tycoon-sugar-cane.png",
+    icon_size = 64,
+    subgroup = "raw-material",
+    order = "b[sugar-cane]",
+    stack_size = 100
+  },
+  {
+    type = "item",
+    name = "tycoon-eggs",
+    icon = "__tycoon-2__/graphics/items/tycoon-eggs.png",
+    icon_size = 64,
+    subgroup = "raw-material",
+    order = "b[eggs]",
+    stack_size = 50
+  },
+  {
+    type = "item",
+    name = "tycoon-tiramisu",
+    icon = "__tycoon-2__/graphics/items/tycoon-tiramisu.png",
+    icon_size = 64,
+    subgroup = "intermediate-product",
+    order = "d[tiramisu]",
+    stack_size = 20,
+    fuel_value = "4MJ",
+    fuel_category = "chemical"
+  }
 })
