@@ -4,19 +4,18 @@
 
 Factorio 2.0 introduced soil mechanics on planet Gleba that allow for farming and agriculture. Our objective is to implement a similar "Farmable Soil" system for Nauvis (the default planet) to enable agriculture without needing to travel to Gleba. This document outlines the implementation plan.
 
-## Research from Gleba's Soil Mechanics
+## Implementation Challenges and Learnings
 
-Gleba uses several types of soil for farming:
+1. **Noise Generation**: The `noise` table is a global variable provided by Factorio, not a module to require. Use declarative noise expressions rather than functional style for map generation.
 
-1. **Natural Fertile Soil** - Exists around Jellystems and Yumako trees
-2. **Wetland Tiles** - Can be made fertile with artificial soil
-3. **Regular Biome Tiles** - Can be made farmable with more expensive overgrowth soil
+2. **Recipe Format**: Always use the `results` array format instead of `result/result_count` for compatibility with other mods (especially Quality mod):
+   ```lua
+   results = {
+     {type = "item", name = "tycoon-farmable-soil", amount = 2}
+   }
+   ```
 
-Soil types on Gleba:
-- **Artificial Jellynut Soil** - For wetland tiles
-- **Artificial Yumako Soil** - For wetland tiles
-- **Overgrowth Jellynut Soil** - For regular tiles
-- **Overgrowth Yumako Soil** - For regular tiles
+3. **Tile Placement**: The `place_as_tile` property requires careful configuration. The `condition` property must follow specific format requirements.
 
 ## Nauvis Wetland Implementation
 
@@ -40,8 +39,7 @@ data:extend({
     mined_sound = {filename = "__base__/sound/walking/dirt-02.ogg"},
     variants = {
       main = {
-        -- Define tile graphics here
-        -- Will use placeholder images initially
+        {picture = "__factorio-tycoon-2__/graphics/terrain/wetland.png", count = 1, size = 1, scale = 1}
       }
     }
   }
@@ -66,24 +64,32 @@ data:extend({
 })
 
 data.raw["tile"]["tycoon-wetland"].autoplace = {
-  probability_expression = noise.define_noise_function(function(x, y, tile, map)
-    -- Generate patches near water
-    local water_proximity = noise.distance_from("water")
-    -- More likely to appear in low elevation areas
-    local elevation = noise.get_control_setting("elevation")
-
-    -- Generate wetland patches with higher probability near water and in low areas
-    return noise.max(0, noise.min(
-      0.35,
-      noise.function_application("exponential", noise.distance_from("water") * -0.05) * 0.4 +
-      noise.random_penalty(map.seed, 0.1) +
-      noise.absolute_value(elevation) * -0.2
-    ))
-  end),
-  richness_expression = noise.define_noise_function(function(x, y, tile, map)
-    -- Higher richness means larger, more continuous patches
-    return noise.random_penalty(map.seed + 100, 0.25) + 0.5
-  end)
+  probability_expression = {
+    type = "multiply",
+    arguments = {
+      { type = "constant", value = 0.4 },
+      {
+        type = "function-application",
+        function_name = "clamp",
+        arguments = {
+          {
+            type = "add",
+            arguments = {
+              {
+                type = "function-application",
+                function_name = "distance-from",
+                arguments = {{ type = "literal-string", value = "water" }}
+              },
+              { type = "constant", value = -0.3 }
+            }
+          },
+          { type = "constant", value = 0 },
+          { type = "constant", value = 1 }
+        }
+      }
+    }
+  },
+  richness_expression = { type = "constant", value = 1 }
 }
 ```
 
@@ -94,12 +100,12 @@ data.raw["tile"]["tycoon-wetland"].autoplace = {
 Create the following items:
 
 ```lua
--- Wetland soil item (harvested from wetland tiles)
 data:extend({
+  -- Wetland soil item (harvested from wetland tiles)
   {
     type = "item",
     name = "tycoon-wetland-soil",
-    icon = "__tycoon__/graphics/items/wetland-soil.png",
+    icon = "__factorio-tycoon-2__/graphics/items/wetland-soil.png",
     icon_size = 64,
     stack_size = 50,
     subgroup = "terrain",
@@ -110,10 +116,14 @@ data:extend({
   {
     type = "item",
     name = "tycoon-farmable-soil",
-    icon = "__tycoon__/graphics/items/farmable-soil.png",
+    icon = "__factorio-tycoon-2__/graphics/items/farmable-soil.png",
     icon_size = 64,
     stack_size = 50,
-    place_result = "tycoon-farmable-soil",
+    place_as_tile = {
+      result = "tycoon-farmable-soil",
+      condition_size = 1
+    },
+    flags = {"hidden-from-flow-stats"},
     subgroup = "terrain",
     order = "a[terrain]-b[farmable-soil]"
   },
@@ -122,60 +132,16 @@ data:extend({
   {
     type = "item",
     name = "tycoon-enhanced-farmable-soil",
-    icon = "__tycoon__/graphics/items/enhanced-farmable-soil.png",
+    icon = "__factorio-tycoon-2__/graphics/items/enhanced-farmable-soil.png",
     icon_size = 64,
     stack_size = 50,
-    place_result = "tycoon-enhanced-farmable-soil",
+    place_as_tile = {
+      result = "tycoon-enhanced-farmable-soil",
+      condition_size = 1
+    },
+    flags = {"hidden-from-flow-stats"},
     subgroup = "terrain",
     order = "a[terrain]-c[enhanced-farmable-soil]"
-  }
-})
-```
-
-### 2. Entity Prototypes
-
-Create tile entities for the farmable soil:
-
-```lua
-data:extend({
-  {
-    type = "tile",
-    name = "tycoon-farmable-soil",
-    needs_correction = false,
-    collision_mask = {"ground-tile"},
-    layer = 61,
-    decorative_removal_probability = 0.9,
-    walking_speed_modifier = 1.0,
-    pollution_absorption_per_second = 0.00015,
-    map_color = {r = 121, g = 93, b = 66},
-    minable = {mining_time = 0.5, result = "tycoon-farmable-soil"},
-    mined_sound = {filename = "__base__/sound/walking/dirt-02.ogg"},
-    variants = {
-      main = {
-        -- Define tile graphics here
-        -- Will use placeholder images initially
-      }
-    }
-  },
-
-  {
-    type = "tile",
-    name = "tycoon-enhanced-farmable-soil",
-    needs_correction = false,
-    collision_mask = {"ground-tile"},
-    layer = 62,  -- Higher layer to override regular farmable soil
-    decorative_removal_probability = 0.95,
-    walking_speed_modifier = 1.0,
-    pollution_absorption_per_second = 0.00025,  -- Better pollution absorption
-    map_color = {r = 101, g = 83, b = 56},
-    minable = {mining_time = 0.5, result = "tycoon-enhanced-farmable-soil"},
-    mined_sound = {filename = "__base__/sound/walking/dirt-02.ogg"},
-    variants = {
-      main = {
-        -- Define tile graphics here
-        -- Will use placeholder images initially
-      }
-    }
   }
 })
 ```
@@ -197,8 +163,9 @@ data:extend({
       {type = "item", name = "tycoon-wetland-soil", amount = 1},
       {type = "item", name = "wood", amount = 1}
     },
-    result = "tycoon-farmable-soil",
-    result_count = 2
+    results = {
+      {type = "item", name = "tycoon-farmable-soil", amount = 2}
+    }
   },
 
   -- Standard recipe for farmable soil (more expensive)
@@ -213,10 +180,12 @@ data:extend({
       {type = "item", name = "wood", amount = 1},
       {type = "fluid", name = "water", amount = 100}
     },
-    result = "tycoon-farmable-soil",
-    result_count = 5
+    results = {
+      {type = "item", name = "tycoon-farmable-soil", amount = 5}
+    }
   },
 
+  -- Recipe for enhanced farmable soil
   {
     type = "recipe",
     name = "tycoon-enhanced-farmable-soil",
@@ -228,8 +197,9 @@ data:extend({
       {type = "item", name = "coal", amount = 1},
       {type = "fluid", name = "water", amount = 100}
     },
-    result = "tycoon-enhanced-farmable-soil",
-    result_count = 2
+    results = {
+      {type = "item", name = "tycoon-enhanced-farmable-soil", amount = 2}
+    }
   }
 })
 ```
@@ -243,7 +213,7 @@ data:extend({
   {
     type = "technology",
     name = "tycoon-agriculture",
-    icon = "__tycoon__/graphics/technologies/agriculture.png",
+    icon = "__factorio-tycoon-2__/graphics/technologies/agriculture.png",
     icon_size = 256,
     effects = {
       {
@@ -273,19 +243,23 @@ data:extend({
 })
 ```
 
-### 5. Locale Entries
-
-Add locale entries to locale/en/base.cfg.
-
 ## Implementation Phases
 
 1. **Phase 1**: Create wetland tiles with autoplace generation on Nauvis
+   - Ensure noise generation works properly using declarative syntax
+   - Test wetland generation in new game worlds
+
 2. **Phase 2**: Create basic farmable soil items, entities, recipes, and technology
+   - Implement all items with proper place_as_tile mechanics
+   - Ensure recipes follow the results array format for compatibility
 
 ## Testing Strategy
 
+A human engineer will have to do this.
+
 Test the following aspects:
-1. Wetland generation in new worlds
+1. Wetland generation in new worlds - verify patches appear near water and in low areas
 2. Wetland tile mining to obtain wetland soil
-3. Soil placement and removal
+3. Soil placement and removal - especially on different tile types
 4. Recipe crafting for all soil types
+5. Technology research unlocking appropriate recipes
