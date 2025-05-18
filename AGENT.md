@@ -23,4 +23,4 @@ smelt items (usually iron ore into iron, but dough into bread is also an example
 
 All data structures add by the tycoon mod must be prefixed with tycoon-, e.g. egg becomes tycoon-egg. This is important to distinguish items from other mods.
 
-We will use the spoilage mechanic to turn one item into a different one after some time. Item spoiling is defined on the item prototype, e.g. through https://lua-api.factorio.com/latest/prototypes/ItemPrototype.html#spoil_result.
+We will use the spoiling mechanic to turn one item into a different one after some time. We configure how items spoil on the item prototype, e.g. through https://lua-api.factorio.com/latest/prototypes/ItemPrototype.html#spoil_result.
