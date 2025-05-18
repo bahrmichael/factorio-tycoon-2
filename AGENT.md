@@ -24,3 +24,14 @@ smelt items (usually iron ore into iron, but dough into bread is also an example
 All data structures add by the tycoon mod must be prefixed with tycoon-, e.g. egg becomes tycoon-egg. This is important to distinguish items from other mods.
 
 We will use the spoiling mechanic to turn one item into a different one after some time. We configure how items spoil on the item prototype, e.g. through https://lua-api.factorio.com/latest/prototypes/ItemPrototype.html#spoil_result.
+
+## Rules for Avoiding Common Factorio Modding Errors
+
+- Never use empty data:extend({}) calls - either add at least one prototype or use comments only
+- Always prefix all items, recipes, and entities with "tycoon-" in ALL references (names, place_result, minable.result, etc.)
+- Always use dictionary format for recipe ingredients with type/name/amount: {type = "item", name = "stone-brick", amount = 10}
+- Use proper lowercase SI prefixes in energy values: "kW", "kJ" (not "KW", "KJ")
+- All assembling machines must have energy_source and energy_usage defined
+- Use energy_source = {type = "electric", usage_priority = "secondary-input"} for electric machines
+- Use proper subgroups that exist in base game ("production-machine" not "production")
+- Keep locale entries in sync with prototype names (including the tycoon- prefix)

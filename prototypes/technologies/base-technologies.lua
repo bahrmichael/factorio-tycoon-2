@@ -1,5 +1,2 @@
 -- Technology prototypes
-
-data:extend({
-  -- Add technologies here
-})
+-- Base technologies will be added here later

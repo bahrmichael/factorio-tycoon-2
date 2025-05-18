@@ -3,50 +3,55 @@
 data:extend({
   {
     type = "recipe",
-    name = "grain",
+    name = "tycoon-grain",
     category = "crafting",
     enabled = true,
     energy_required = 1,
     ingredients = {
-      {"wheat", 2}
+      {type = "item", name = "tycoon-wheat", amount = 2}
     },
-    result = "grain",
-    result_count = 1
+    results = {
+      {type = "item", name = "tycoon-grain", amount = 1}
+    }
   },
   {
     type = "recipe",
-    name = "flour",
+    name = "tycoon-flour",
     category = "crafting",
     enabled = true,
     energy_required = 2,
     ingredients = {
-      {"grain", 1}
+      {type = "item", name = "tycoon-grain", amount = 1}
     },
-    result = "flour",
-    result_count = 1
+    results = {
+      {type = "item", name = "tycoon-flour", amount = 1}
+    }
   },
   {
     type = "recipe",
-    name = "dough",
+    name = "tycoon-dough",
     category = "crafting-with-fluid",
     enabled = true,
     energy_required = 3,
     ingredients = {
-      {"flour", 2},
-      {type="fluid", name="milk", amount=20}
+      {type = "item", name = "tycoon-flour", amount = 2},
+      {type = "fluid", name = "tycoon-milk", amount = 20}
     },
-    result = "dough",
-    result_count = 1
+    results = {
+      {type = "item", name = "tycoon-dough", amount = 1}
+    }
   },
   {
     type = "recipe",
-    name = "bread",
+    name = "tycoon-bread",
     category = "smelting",
     enabled = true,
     energy_required = 3.5,
     ingredients = {
-      {"dough", 1}
+      {type = "item", name = "tycoon-dough", amount = 1}
     },
-    result = "bread"
+    results = {
+      {type = "item", name = "tycoon-bread", amount = 1}
+    }
   }
 })

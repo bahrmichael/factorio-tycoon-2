@@ -1,5 +1,2 @@
 -- Item prototypes
-
-data:extend({
-  -- Add items here
-})
+-- Base items will be added here later

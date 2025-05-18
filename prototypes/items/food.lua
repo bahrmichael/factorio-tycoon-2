@@ -3,7 +3,7 @@
 data:extend({
   {
     type = "item",
-    name = "wheat",
+    name = "tycoon-wheat",
     icon = "__tycoon-2__/graphics/items/wheat.png",
     icon_size = 64,
     subgroup = "raw-material",
@@ -12,7 +12,7 @@ data:extend({
   },
   {
     type = "item",
-    name = "grain",
+    name = "tycoon-grain",
     icon = "__tycoon-2__/graphics/items/grain.png",
     icon_size = 64,
     subgroup = "intermediate-product",
@@ -21,7 +21,7 @@ data:extend({
   },
   {
     type = "item",
-    name = "flour",
+    name = "tycoon-flour",
     icon = "__tycoon-2__/graphics/items/flour.png",
     icon_size = 64,
     subgroup = "intermediate-product",
@@ -30,10 +30,10 @@ data:extend({
   },
   {
     type = "fluid",
-    name = "milk",
+    name = "tycoon-milk",
     default_temperature = 15,
     max_temperature = 100,
-    heat_capacity = "0.2KJ",
+    heat_capacity = "0.2kJ",
     base_color = {r=0.9, g=0.9, b=0.9},
     flow_color = {r=0.9, g=0.9, b=1.0},
     icon = "__tycoon-2__/graphics/items/milk.png",
@@ -42,7 +42,7 @@ data:extend({
   },
   {
     type = "item",
-    name = "dough",
+    name = "tycoon-dough",
     icon = "__tycoon-2__/graphics/items/dough.png",
     icon_size = 64,
     subgroup = "intermediate-product",
@@ -51,7 +51,7 @@ data:extend({
   },
   {
     type = "item",
-    name = "bread",
+    name = "tycoon-bread",
     icon = "__tycoon-2__/graphics/items/bread.png",
     icon_size = 64,
     subgroup = "intermediate-product",

@@ -3,38 +3,44 @@
 data:extend({
   {
     type = "recipe",
-    name = "small-house",
+    name = "tycoon-small-house",
     enabled = true,
     ingredients = {
-      {"stone-brick", 10},
-      {"wood", 20}
+      {type = "item", name = "stone-brick", amount = 10},
+      {type = "item", name = "wood", amount = 20}
     },
-    result = "small-house",
+    results = {
+      {type = "item", name = "tycoon-small-house", amount = 1}
+    },
     energy_required = 5
   },
   {
     type = "recipe",
-    name = "medium-house",
+    name = "tycoon-medium-house",
     enabled = true,
     ingredients = {
-      {"stone-brick", 20},
-      {"wood", 40},
-      {"iron-plate", 10}
+      {type = "item", name = "stone-brick", amount = 20},
+      {type = "item", name = "wood", amount = 40},
+      {type = "item", name = "iron-plate", amount = 10}
     },
-    result = "medium-house",
+    results = {
+      {type = "item", name = "tycoon-medium-house", amount = 1}
+    },
     energy_required = 10
   },
   {
     type = "recipe",
-    name = "large-house",
+    name = "tycoon-large-house",
     enabled = true,
     ingredients = {
-      {"stone-brick", 40},
-      {"wood", 60},
-      {"iron-plate", 20},
-      {"copper-plate", 10}
+      {type = "item", name = "stone-brick", amount = 40},
+      {type = "item", name = "wood", amount = 60},
+      {type = "item", name = "iron-plate", amount = 20},
+      {type = "item", name = "copper-plate", amount = 10}
     },
-    result = "large-house",
+    results = {
+      {type = "item", name = "tycoon-large-house", amount = 1}
+    },
     energy_required = 15
   }
 })

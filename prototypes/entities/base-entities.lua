@@ -1,5 +1,2 @@
 -- Entity prototypes
-
-data:extend({
-  -- Add entities here
-})
+-- Base entities will be added here later
