@@ -18,6 +18,75 @@ Soil types on Gleba:
 - **Overgrowth Jellynut Soil** - For regular tiles
 - **Overgrowth Yumako Soil** - For regular tiles
 
+## Nauvis Wetland Implementation
+
+To create a system similar to Gleba, we need to generate wetland patches on Nauvis that can be converted into farmable soil more easily than regular terrain.
+
+### 1. Wetland Tile Prototype
+
+```lua
+data:extend({
+  {
+    type = "tile",
+    name = "tycoon-wetland",
+    needs_correction = false,
+    collision_mask = {"ground-tile"},
+    layer = 60,
+    decorative_removal_probability = 0.9,
+    walking_speed_modifier = 0.8, -- slightly slower to walk on
+    pollution_absorption_per_second = 0.0002, -- better pollution absorption
+    map_color = {r = 76, g = 105, b = 113},
+    minable = {mining_time = 0.5, result = "tycoon-wetland-soil"},
+    mined_sound = {filename = "__base__/sound/walking/dirt-02.ogg"},
+    variants = {
+      main = {
+        -- Define tile graphics here
+        -- Will use placeholder images initially
+      }
+    }
+  }
+})
+```
+
+### 2. Wetland Autoplace Generation
+
+```lua
+data:extend({
+  {
+    type = "autoplace-control",
+    name = "tycoon-wetland",
+    richness = true,
+    order = "b-a",
+    category = "terrain"
+  },
+  {
+    type = "noise-layer",
+    name = "tycoon-wetland"
+  }
+})
+
+data.raw["tile"]["tycoon-wetland"].autoplace = {
+  probability_expression = noise.define_noise_function(function(x, y, tile, map)
+    -- Generate patches near water
+    local water_proximity = noise.distance_from("water")
+    -- More likely to appear in low elevation areas
+    local elevation = noise.get_control_setting("elevation")
+
+    -- Generate wetland patches with higher probability near water and in low areas
+    return noise.max(0, noise.min(
+      0.35,
+      noise.function_application("exponential", noise.distance_from("water") * -0.05) * 0.4 +
+      noise.random_penalty(map.seed, 0.1) +
+      noise.absolute_value(elevation) * -0.2
+    ))
+  end),
+  richness_expression = noise.define_noise_function(function(x, y, tile, map)
+    -- Higher richness means larger, more continuous patches
+    return noise.random_penalty(map.seed + 100, 0.25) + 0.5
+  end)
+}
+```
+
 ## Farmable Soil Implementation for Nauvis
 
 ### 1. Item Prototypes
@@ -25,8 +94,19 @@ Soil types on Gleba:
 Create the following items:
 
 ```lua
--- Basic farmable soil item
+-- Wetland soil item (harvested from wetland tiles)
 data:extend({
+  {
+    type = "item",
+    name = "tycoon-wetland-soil",
+    icon = "__tycoon__/graphics/items/wetland-soil.png",
+    icon_size = 64,
+    stack_size = 50,
+    subgroup = "terrain",
+    order = "a[terrain]-a[wetland-soil]"
+  },
+
+  -- Basic farmable soil item
   {
     type = "item",
     name = "tycoon-farmable-soil",
@@ -77,7 +157,7 @@ data:extend({
       }
     }
   },
-  
+
   {
     type = "tile",
     name = "tycoon-enhanced-farmable-soil",
@@ -106,6 +186,22 @@ Create recipes for crafting the farmable soil:
 
 ```lua
 data:extend({
+  -- Recipe for farmable soil from wetland soil (easier/cheaper)
+  {
+    type = "recipe",
+    name = "tycoon-farmable-soil-from-wetland",
+    energy_required = 1,
+    enabled = false,  -- Unlocked by technology
+    category = "crafting",
+    ingredients = {
+      {type = "item", name = "tycoon-wetland-soil", amount = 1},
+      {type = "item", name = "wood", amount = 1}
+    },
+    result = "tycoon-farmable-soil",
+    result_count = 2
+  },
+
+  -- Standard recipe for farmable soil (more expensive)
   {
     type = "recipe",
     name = "tycoon-farmable-soil",
@@ -120,7 +216,7 @@ data:extend({
     result = "tycoon-farmable-soil",
     result_count = 5
   },
-  
+
   {
     type = "recipe",
     name = "tycoon-enhanced-farmable-soil",
@@ -152,6 +248,10 @@ data:extend({
     effects = {
       {
         type = "unlock-recipe",
+        recipe = "tycoon-farmable-soil-from-wetland"
+      },
+      {
+        type = "unlock-recipe",
         recipe = "tycoon-farmable-soil"
       },
       {
@@ -173,70 +273,19 @@ data:extend({
 })
 ```
 
-### 5. Crop Growth System
+### 5. Locale Entries
 
-Implement a basic crop growing system:
-
-1. Create crop items (seeds, growing crops, harvested crops)
-2. Create crop entities that have different stages of growth
-3. Use control.lua to handle crop growth based on time
-4. Ensure crops can only be planted on farmable soil tiles
-
-### 6. Images and Graphics
-
-Create placeholder images using the utility:
-
-```
-placeholder-image 64 64 "Farmable Soil" graphics/items/farmable-soil.png
-placeholder-image 64 64 "Enhanced Soil" graphics/items/enhanced-farmable-soil.png
-placeholder-image 256 256 "Agriculture" graphics/technologies/agriculture.png
-```
-
-### 7. Locale Entries
-
-Add locale entries to locale/en/base.cfg:
-
-```
-[item-name]
-tycoon-farmable-soil=Farmable Soil
-tycoon-enhanced-farmable-soil=Enhanced Farmable Soil
-
-[entity-name]
-tycoon-farmable-soil=Farmable Soil
-tycoon-enhanced-farmable-soil=Enhanced Farmable Soil
-
-[recipe-name]
-tycoon-farmable-soil=Farmable Soil
-tycoon-enhanced-farmable-soil=Enhanced Farmable Soil
-
-[technology-name]
-tycoon-agriculture=Agriculture
-
-[technology-description]
-tycoon-agriculture=Allows the creation of farmable soil to grow crops on Nauvis.
-```
+Add locale entries to locale/en/base.cfg.
 
 ## Implementation Phases
 
-1. **Phase 1**: Create basic farmable soil items, entities, recipes, and technology
-2. **Phase 2**: Implement graphics and visuals
-3. **Phase 3**: Develop the crop growth system
-4. **Phase 4**: Add advanced farming features (fertilizers, irrigation)
-5. **Phase 5**: Balancing and optimization
+1. **Phase 1**: Create wetland tiles with autoplace generation on Nauvis
+2. **Phase 2**: Create basic farmable soil items, entities, recipes, and technology
 
 ## Testing Strategy
 
 Test the following aspects:
-1. Soil placement and removal
-2. Recipe crafting for both soil types
-3. Technology research progression
-4. Crop planting and harvesting on different soil types
-5. Growth rates and yields
-
-## Future Extensions
-
-1. Add special crop types that only grow on enhanced soil
-2. Implement irrigation systems to improve crop growth
-3. Create specialized farming machines
-4. Add seasonal effects on crop growth
-5. Implement a composting system for organic waste
+1. Wetland generation in new worlds
+2. Wetland tile mining to obtain wetland soil
+3. Soil placement and removal
+4. Recipe crafting for all soil types
