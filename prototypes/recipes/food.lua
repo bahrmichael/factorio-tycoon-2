@@ -49,4 +49,85 @@ data:extend({
     },
     result = "bread"
   }
+  },
+  -- Tiramisu recipes
+  {
+    type = "recipe",
+    name = "tiramisu",
+    category = "crafting-with-fluid",
+    enabled = true,
+    energy_required = 10,
+    ingredients = {
+      {"mascarpone", 2},
+      {"coffee", 1},
+      {"cocoa-powder", 1},
+      {"ladyfingers", 2},
+      {"sugar", 1}
+    },
+    result = "tiramisu",
+    result_count = 1
+  },
+  {
+    type = "recipe",
+    name = "mascarpone",
+    category = "crafting-with-fluid",
+    enabled = true,
+    energy_required = 5,
+    ingredients = {
+      {type="fluid", name="milk", amount=30}
+    },
+    result = "mascarpone",
+    result_count = 1
+  },
+  {
+    type = "recipe",
+    name = "coffee",
+    category = "crafting-with-fluid",
+    enabled = true,
+    energy_required = 2,
+    ingredients = {
+      {"coffee-beans", 1},
+      {type="fluid", name="water", amount=10}
+    },
+    result = "coffee",
+    result_count = 1
+  },
+  {
+    type = "recipe",
+    name = "cocoa-powder",
+    category = "crafting",
+    enabled = true,
+    energy_required = 2,
+    ingredients = {
+      {"cocoa-beans", 1}
+    },
+    result = "cocoa-powder",
+    result_count = 1
+  },
+  {
+    type = "recipe",
+    name = "sugar",
+    category = "crafting",
+    enabled = true,
+    energy_required = 2,
+    ingredients = {
+      {"sugarcane", 2}
+    },
+    result = "sugar",
+    result_count = 1
+  },
+  {
+    type = "recipe",
+    name = "ladyfingers",
+    category = "smelting",
+    enabled = true,
+    energy_required = 5,
+    ingredients = {
+      {"flour", 2},
+      {"sugar", 1},
+      {"eggs", 1}
+    },
+    result = "ladyfingers",
+    result_count = 2
+  }
 })
