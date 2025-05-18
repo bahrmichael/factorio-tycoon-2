@@ -176,6 +176,13 @@ func processLuaFile(content string, _ string, prototypes map[string][]string) {
 
 // Determines if an image should be generated for the given prototype
 func generateImageIfMissing(protoType, protoName string) {
+	// Only process items with tycoon- prefix
+	if !strings.HasPrefix(protoName, "tycoon-") {
+		// Skip non-tycoon items
+		fmt.Printf("Skipping non-tycoon %s: '%s'\n", protoType, protoName)
+		return
+	}
+
 	// Determine expected image path based on prototype type and name
 	var imagePath string
 	switch protoType {
@@ -204,10 +211,8 @@ func generateImageIfMissing(protoType, protoName string) {
 	// For items, use only the first letter capitalized
 	text := protoName
 	if protoType == "item" {
-		// Strip tycoon- prefix if present
-		if strings.HasPrefix(protoName, "tycoon-") {
-			text = strings.TrimPrefix(protoName, "tycoon-")
-		}
+		// Strip tycoon- prefix (we already verified it exists)
+		text = strings.TrimPrefix(protoName, "tycoon-")
 		
 		if len(text) > 0 {
 			text = strings.ToUpper(text[:1])
