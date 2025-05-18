@@ -26,6 +26,16 @@ jobs:
       #   if: steps.extract.outputs.comment != ''
       #   run: echo ${{ steps.extract.outputs.comment }}"
 
+      - name: Setup Node.js
+        if: steps.extract.outputs.comment != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install AMP
+        if: steps.extract.outputs.comment != ''
+        run: npm install -g @sourcegraph/amp
+
       - name: Run AMP
         if: steps.extract.outputs.comment != ''
         id: amp
