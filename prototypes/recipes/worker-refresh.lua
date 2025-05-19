@@ -11,7 +11,8 @@ data:extend({
       {type = "item", name = "tycoon-tired-worker", amount = 1}
     },
     results = {
-      {type = "item", name = "tycoon-worker", amount = 1}
+      {type = "item", name = "tycoon-worker", amount = 1},
+      {type = "item", name = "tycoon-mixed-waste", amount = 1}
     },
     icon = "__tycoon-2__/graphics/items/worker.png",
     icon_size = 64,
@@ -28,7 +29,8 @@ data:extend({
       {type = "item", name = "tycoon-tired-worker", amount = 2}
     },
     results = {
-      {type = "item", name = "tycoon-worker", amount = 2}
+      {type = "item", name = "tycoon-worker", amount = 2},
+      {type = "item", name = "tycoon-mixed-waste", amount = 2}
     },
     icon = "__tycoon-2__/graphics/items/worker.png",
     icon_size = 64,
@@ -45,7 +47,8 @@ data:extend({
       {type = "item", name = "tycoon-tired-worker", amount = 4}
     },
     results = {
-      {type = "item", name = "tycoon-worker", amount = 4}
+      {type = "item", name = "tycoon-worker", amount = 4},
+      {type = "item", name = "tycoon-mixed-waste", amount = 4}
     },
     icon = "__tycoon-2__/graphics/items/worker.png",
     icon_size = 64,
