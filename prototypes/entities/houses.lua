@@ -13,12 +13,14 @@ data:extend({
         type = "assembling-machine",
         name = "tycoon-small-house",
         energy_source = {
-            type = "electric",
-            usage_priority = "secondary-input"
+            type = "burner",
+            fuel_categories = {"food"},
+            effectivity = 0.75,
+            fuel_inventory_size = 1
         },
         crafting_categories = { "house-crafting" },
         crafting_speed = 0.5,
-        energy_usage = "50kW",
+        energy_usage = "200kW",
         icon = "__tycoon-2__/graphics/items/small-house.png",
         icon_size = 64,
         flags = { "placeable-neutral", "player-creation" },
@@ -39,12 +41,14 @@ data:extend({
         type = "assembling-machine",
         name = "tycoon-medium-house",
         energy_source = {
-            type = "electric",
-            usage_priority = "secondary-input"
+            type = "burner",
+            fuel_categories = {"food"},
+            effectivity = 0.65,
+            fuel_inventory_size = 1
         },
         crafting_categories = { "house-crafting" },
-        crafting_speed = 0.75,
-        energy_usage = "75kW",
+        crafting_speed = 1.0,
+        energy_usage = "400kW",
         icon = "__tycoon-2__/graphics/items/medium-house.png",
         icon_size = 64,
         flags = { "placeable-neutral", "player-creation" },
@@ -65,12 +69,14 @@ data:extend({
         type = "assembling-machine",
         name = "tycoon-large-house",
         energy_source = {
-            type = "electric",
-            usage_priority = "secondary-input"
+            type = "burner",
+            fuel_categories = {"food"},
+            effectivity = 0.5,
+            fuel_inventory_size = 2
         },
         crafting_categories = { "house-crafting" },
-        crafting_speed = 1.0,
-        energy_usage = "100kW",
+        crafting_speed = 2.0,
+        energy_usage = "800kW",
         icon = "__tycoon-2__/graphics/items/large-house.png",
         icon_size = 64,
         flags = { "placeable-neutral", "player-creation" },

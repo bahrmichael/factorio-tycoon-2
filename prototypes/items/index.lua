@@ -10,4 +10,7 @@ require("prototypes.items.food")
 -- Worker items
 require("prototypes.items.workers")
 
+-- Waste items
+require("prototypes.items.waste")
+
 -- You can add more specific require statements here as you create new files
