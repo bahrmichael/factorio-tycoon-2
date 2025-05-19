@@ -11,7 +11,7 @@ data:extend({
         stack_size = 50,
         fuel_value = "1MJ",
         fuel_category = "chemical",
-        spoil_time = 3600, -- 1 hour in ticks (60 ticks per second, 3600 = 60 seconds)
+        spoil_ticks = 216000, -- 1 hour in ticks (60 ticks per second, 3600 = 60 seconds)
         spoil_result = "tycoon-tired-worker"
     },
     {
