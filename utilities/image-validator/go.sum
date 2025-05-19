@@ -1,0 +1,6 @@
+github.com/Shopify/go-lua v0.0.0-20240527182111-9ab1540f3f5f h1:XZtTrbBgkw5jgNeaulUVleb/IqTOKgR8x0+uTMzmOjs=
+github.com/Shopify/go-lua v0.0.0-20240527182111-9ab1540f3f5f/go.mod h1:M4CxjVc/1Nwka5atBv7G/sb7Ac2BDe3+FxbiT9iVNIQ=
+github.com/Shopify/goluago v0.0.0-20240527182001-ec4ec6c26eab h1:lEd6vZgWJOjXAoIDUxSgg/U8/DbFEJnTfcBOQyAhej4=
+github.com/Shopify/goluago v0.0.0-20240527182001-ec4ec6c26eab/go.mod h1:xIykgNzJggTWudqtySZwJa8Ab8NFgUSbSpPrTHQaHIc=
+github.com/pborman/uuid v0.0.0-20160216163710-c55201b03606 h1:/CPgDYrfeK2LMK6xcUhvI17yO9SlpAdDIJGkhDEgO8A=
+github.com/pborman/uuid v0.0.0-20160216163710-c55201b03606/go.mod h1:VyrYX9gd7irzKovcSS6BIIEwPRkP2Wm2m9ufcdFSJ34=
