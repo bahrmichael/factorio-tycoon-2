@@ -11,3 +11,5 @@ require("prototypes.recipes.food")
 require("prototypes.recipes.workers")
 
 -- You can add more specific require statements here as you create new files
+-- Soil recipes
+require("prototypes.recipes.soil")
